@@ -68,6 +68,11 @@ def reset(current_model, *args):
     return current_model.reset(*args)
 
 
+def reset1(current_model, *args):
+    results = current_model.reset(*args)
+    return results[:4]
+
+
 def retry(current_model, *args):
     iter = current_model.retry(*args)
     for i in iter:

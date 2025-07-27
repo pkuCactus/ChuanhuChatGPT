@@ -154,14 +154,14 @@ function gradioApp() {
     return elem.shadowRoot ? elem.shadowRoot : elem;
 }
 
-function showConfirmationDialog(a, file, c) {
+function showConfirmationDialog(a, file) {
     if (file != "") {
         var result = confirm(i18n(deleteConfirm_i18n_pref) + file + i18n(deleteConfirm_i18n_suff));
         if (result) {
-            return [a, file, c];
+            return [a, file];
         }
     }
-    return [a, "CANCELED", c];
+    return [a, "CANCELED"];
 }
 
 function selectHistory() {

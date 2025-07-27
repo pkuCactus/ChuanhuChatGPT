@@ -23,7 +23,7 @@ def webpath(fn):
         web_path = os.path.relpath(fn, shared.chuanhu_path).replace('\\', '/')
     else:
         web_path = os.path.abspath(fn)
-    return f'file={web_path}?{os.path.getmtime(fn)}'
+    return f'/gradio_api/file={web_path}?{os.path.getmtime(fn)}'
 
 ScriptFile = namedtuple("ScriptFile", ["basedir", "filename", "path"])
 
@@ -65,15 +65,16 @@ def reload_javascript():
         <meta name='viewport' content='width=device-width, initial-scale=1.0, user-scalable=no, viewport-fit=cover'>
         <meta name="theme-color" content="#ffffff">
 
-        <link rel="apple-touch-icon-precomposed" href="/file=web_assets/icon/mask-icon-512.png" crossorigin="use-credentials">
-        <link rel="apple-touch-icon" href="/file=web_assets/icon/mask-icon-512.png" crossorigin="use-credentials">
+        <link rel="apple-touch-icon-precomposed" href="/gradio_api/file=web_assets/icon/mask-icon-512.png" crossorigin="use-credentials">
+        <link rel="apple-touch-icon" href="/gradio_api/file=web_assets/icon/mask-icon-512.png" crossorigin="use-credentials">
         
-        <link rel="manifest" href="/file=web_assets/manifest.json" crossorigin="use-credentials">
+        <link rel="manifest" href="/gradio_api/file=web_assets/manifest.json" crossorigin="use-credentials">
     """
     css = css_html()
 
     def template_response(*args, **kwargs):
         res = GradioTemplateResponseOriginal(*args, **kwargs)
+        res.body = res.body.replace(b'<link rel="manifest" href="/manifest.json" />', b'')
         res.body = res.body.replace(b'</head>', f'{meta}{js}</head>'.encode("utf8"))
         # res.body = res.body.replace(b'</head>', f'{js}</head>'.encode("utf8"))
         res.body = res.body.replace(b'</body>', f'{css}</body>'.encode("utf8"))

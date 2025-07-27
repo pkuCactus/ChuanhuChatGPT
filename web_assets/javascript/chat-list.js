@@ -82,7 +82,7 @@ function exportBtnCheck() {
     exportBtn.classList.toggle('disabled', grHistoryExportBtn.disabled);
 }
 
-function saveChatHistory(a, b, c, d) {
+function saveChatHistory(a, b) {
     var fileName = b;
 
     while (true) {
@@ -93,12 +93,12 @@ function saveChatHistory(a, b, c, d) {
             // 不返回原文件名，而是使用 throw new Error() 打断程序，避免 gradio 进行保存操作
             // break;
         } else if (isValidFileName(result)) {
-            return [a, result, c, d];
+            return [a, result];
         } else {
             alert(validFileName_i18n + "!@#$%^&*()<>?/\\|}{~:");
         }
     }
-    return [a, b, c, d]; // 兜底保障
+    return [a, b]; // 兜底保障
 }
 
 function isValidFileName(fileName) {

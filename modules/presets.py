@@ -676,6 +676,8 @@ small_and_beautiful_theme = gr.themes.Soft(
             c950="#171717",
         ),
         radius_size=gr.themes.sizes.radius_sm,
+        font=gr.themes.GoogleFont("Roboto", weights=(100, 300)),
+        font_mono=gr.themes.GoogleFont("Roboto Mono", weights=(100, 300)),
     ).set(
         # button_primary_background_fill="*primary_500",
         button_primary_background_fill_dark="*primary_600",

@@ -29,7 +29,8 @@ def create_new_model():
     return get_model(model_name=MODELS[DEFAULT_MODEL], access_key=my_api_key)[0]
 
 
-with gr.Blocks(theme=small_and_beautiful_theme) as demo:
+demo = gr.Blocks(theme=small_and_beautiful_theme)
+with demo:
     user_name = gr.Textbox("", visible=False)
     promptTemplates = gr.State(load_template(get_template_names()[0], mode=2))
     user_question = gr.State("")
@@ -41,7 +42,7 @@ with gr.Blocks(theme=small_and_beautiful_theme) as demo:
 
     with gr.Row(elem_id="chuanhu-header"):
         gr.HTML(get_html("header_title.html").format(
-            app_title=CHUANHU_TITLE), elem_id="app-title")
+            app_title=CHUANHU_TITLE), elem_id="app-title", padding=False)
         status_display = gr.Markdown(get_geoip, elem_id="status-display")
     with gr.Row(elem_id="float-display"):
         user_info = gr.Markdown(
@@ -125,7 +126,7 @@ with gr.Blocks(theme=small_and_beautiful_theme) as demo:
                     gr.HTML(get_html("chatbot_header_btn.html").format(
                         json_label=i18n("历史记录（JSON）"),
                         md_label=i18n("导出为 Markdown")
-                    ), elem_id="chatbot-header-btn-bar")
+                    ), elem_id="chatbot-header-btn-bar", padding=False)
                 with gr.Row():
                     chatbot = gr.Chatbot(
                         label="Chuanhu Chat",
@@ -427,7 +428,7 @@ with gr.Blocks(theme=small_and_beautiful_theme) as demo:
 
                     with gr.Tab(label=i18n("关于"), elem_id="about-tab"):
                         gr.Markdown(
-                            '<img alt="Chuanhu Chat logo" src="file=web_assets/icon/any-icon-512.png" style="max-width: 144px;">')
+                            '<img alt="Chuanhu Chat logo" src="/gradio_api/file=web_assets/icon/any-icon-512.png" style="max-width: 144px;">')
                         gr.Markdown("# "+i18n("川虎Chat"))
                         gr.HTML(get_html("footer.html").format(
                             versions=versions_html()), elem_id="footer")
@@ -687,11 +688,11 @@ with gr.Blocks(theme=small_and_beautiful_theme) as demo:
         [current_model, saveFileName],
         [historySelectList],
         show_progress=True,
-        js='(a,b,c,d)=>{return saveChatHistory(a,b,c,d);}'
+        js='(a,b)=>{return saveChatHistory(a,b);}'
     )
     historyRefreshBtn.click(**refresh_history_args)
-    historyDeleteBtn.click(delete_chat_history, [current_model, historySelectList], [status_display, historySelectList, chatbot], js='(a,b,c)=>{return showConfirmationDialog(a, b, c);}').then(
-        reset,
+    historyDeleteBtn.click(delete_chat_history, [current_model, historySelectList], [status_display, historySelectList, chatbot], js='(a,b)=>{return showConfirmationDialog(a, b);}').then(
+        reset1,
         inputs=[current_model, retain_system_prompt_checkbox],
         outputs=[chatbot, status_display, historySelectList, systemPromptTxt],
         show_progress=True,
@@ -802,8 +803,11 @@ demo.title = i18n("川虎Chat 🚀")
 if __name__ == "__main__":
     reload_javascript()
     setup_wizard()
+
+    allowed_dirs = ["./web_assets"]
+    gr.set_static_paths(allowed_dirs)
     demo.queue().launch(
-        allowed_paths=["web_assets"],
+        allowed_paths=allowed_dirs,
         blocked_paths=["config.json", "files", "models", "lora", "modules", "history"],
         server_name=server_name,
         server_port=server_port,
@@ -811,4 +815,7 @@ if __name__ == "__main__":
         auth=auth_from_conf if authflag else None,
         favicon_path="./web_assets/favicon.ico",
         inbrowser=autobrowser and not dockerflag,  # 禁止在docker下开启inbrowser
+        # ssl_certfile="cert.pem",
+        # ssl_keyfile="key.pem",
+        strict_cors=False,
     )

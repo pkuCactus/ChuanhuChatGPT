@@ -56,9 +56,9 @@ function escapeMarkdown(text) {
 function downloadHistory(gradioUsername, historyname, format=".json") {
     let fileUrl;
     if (gradioUsername === null || gradioUsername.trim() === "") {
-        fileUrl = `/file=./history/${historyname}`;
+        fileUrl = `file=./history/${historyname}`;
     } else {
-        fileUrl = `/file=./history/${gradioUsername}/${historyname}`;
+        fileUrl = `file=./history/${gradioUsername}/${historyname}`;
     }
     downloadFile(fileUrl, historyname, format);
 }
@@ -132,7 +132,7 @@ function rebootingChuanhu() {
     document.body.appendChild(pageInfo);
 
     var requestPing = function () {
-        requestGet("./file=web_assets/manifest.json", {}, function (data) {
+        requestGet("/gradio_api/file=web_assets/manifest.json", {}, function (data) {
             location.reload();
         }, function () {
             setTimeout(requestPing, 500);

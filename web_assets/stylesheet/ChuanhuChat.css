@@ -66,6 +66,7 @@ body.popup-open {
     display: inline-flex;
     align-items: center;
     position: absolute;
+    overflow: visible !important;
 }
 #description {
     text-align: center;
@@ -397,6 +398,7 @@ body.popup-open {
     align-items: center;
     display: flex;
     height: 60px;
+    overflow: visible !important;
 }
 #chatbot-header-btn-bar > * {
     width: 100%;
